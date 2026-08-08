@@ -1,0 +1,95 @@
+const names = [
+  '李明',
+  '王芳',
+  '张伟',
+  '刘静',
+  '陈杰',
+  '赵敏',
+  '周强',
+  '孙丽',
+  '吴涛',
+  '郑洁',
+  '徐勇',
+  '何琳',
+]
+const companies = ['北京分公司', '上海分公司', '广东分公司', '浙江分公司']
+const districts = [
+  ['110000', '北京市', '110100', '北京市', '110108', '海淀区'],
+  ['310000', '上海市', '310100', '上海市', '310115', '浦东新区'],
+  ['440000', '广东省', '440100', '广州市', '440106', '天河区'],
+  ['330000', '浙江省', '330100', '杭州市', '330106', '西湖区'],
+]
+
+export const createRescueOrderRows = () =>
+  names.map((insuredName, index) => {
+    const number = String(index + 1).padStart(3, '0')
+    const [provinceCode, provinceName, cityCode, cityName, districtCode, districtName] =
+      districts[index % districts.length]
+    const day = String(6 - (index % 6)).padStart(2, '0')
+    const failed = index === 3
+    const pending = index === 7
+    const reportStatus = failed ? 'FAILED' : pending ? 'PENDING' : 'SUCCESS'
+    return {
+      id: (2026080400000001000n + BigInt(index)).toString(),
+      serviceTimes: index % 3,
+      serviceMileage: 10 + index * 1.5,
+      accidentType: index % 2 ? '非事故救援' : '事故救援',
+      rescueNo: `BOCRS20260806${number}`,
+      callerName: names[(index + 2) % names.length],
+      callTime: `2026-08-${day} 09:${String(10 + index).padStart(2, '0')}`,
+      callerPhone: `13800138${String(index).padStart(3, '0')}`,
+      policyNo: `30501202611000000${number}`,
+      groupId: `ORG${String((index % 4) + 1).padStart(3, '0')}`,
+      companyName: companies[index % companies.length],
+      reportNo: `REPORT20260806${number}`,
+      insuredName,
+      identityNo: `11010119900101${String(1000 + index).slice(-4)}`,
+      policyStartDate: '2026-01-01',
+      policyEndDate: '2026-12-31',
+      carNo: `京A${String(12345 + index)}`,
+      engineNo: `ENG202608${number}`,
+      carType: index % 2 ? '大众帕萨特' : '别克君越',
+      vehicleCategory: index % 3 ? '客车' : '货车',
+      seatNum: index % 3 ? 5 : 2,
+      carColor: index % 2 ? '白色' : '黑色',
+      customerType: index % 4 === 0 ? 'VIP客户' : '普通客户',
+      newOrderFlag: index % 3 ? 'YES' : 'NO',
+      rescueObject: index % 4 ? '标的' : '三者',
+      linkmanName: names[(index + 1) % names.length],
+      linkmanPhone: `13900139${String(index).padStart(3, '0')}`,
+      rescueRule: '免费拖车50公里，超出部分按救援公司标准收费',
+      provinceCode,
+      provinceName,
+      cityCode,
+      cityName,
+      districtCode,
+      districtName,
+      detailAddress: `示范道路${index + 1}号`,
+      rescueAddr: `${provinceName}${cityName}${districtName}示范道路${index + 1}号`,
+      freeMileage: 50,
+      dispatchTarget: 'ZHONGBAO',
+      rescueType: index % 2 ? '0304' : '0303',
+      rescueDate: `2026-08-${day} 10:${String(10 + index).padStart(2, '0')}`,
+      repairFlag: index % 2 ? 'NO' : 'YES',
+      destAddress: index % 3 ? `服务目的地${index + 1}` : '',
+      reportRecorder: '4359939',
+      employeeNo: '4359939',
+      orderDesc: failed ? '中保上报异常，待人工处理' : index % 3 ? '' : '客户要求尽快到达',
+      reportStatus,
+      serviceNo: reportStatus === 'SUCCESS' ? `OD${String(index + 1).padStart(9, '0')}` : '',
+      trackUrl: reportStatus === 'SUCCESS' ? `http://example.com/track/BOCRS20260806${number}` : '',
+      reportMessage: failed ? '模拟中保车服上报失败' : '',
+      serviceStatus: String(index % 10).padStart(2, '0'),
+      orderStatus: failed ? 'REPORT_FAILED' : index % 3 ? 'COMPLETED' : 'DISPATCHED',
+      auditStatus: index % 4 ? 'APPROVED' : 'PENDING',
+      rescueFee: index % 4 ? 120 + index * 15 : null,
+      filingStatus: index % 3 ? 'YES' : 'NO',
+      version: 0,
+      tenantId: 'default',
+      createUser: '4359939',
+      createDept: companies[index % companies.length],
+      updateUser: '4359939',
+      createTime: `2026-08-${day} ${String(16 - (index % 8)).padStart(2, '0')}:20:00`,
+      updateTime: `2026-08-${day} ${String(16 - (index % 8)).padStart(2, '0')}:25:00`,
+    }
+  })
